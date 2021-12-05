@@ -8,10 +8,9 @@ from hw1.prevent import UserLoginRateThrottle
 from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.signals import user_logged_out
 from django.contrib.auth.signals import user_login_failed
-
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.forms import UserCreationForm
-
-
+from hw1.forms import UserCreationForm1
 from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
@@ -49,6 +48,22 @@ def home(request):
 def logoutUser(request):
     logout(request)
     return redirect('loginTask3')
+
+def registerTask1(request):
+    form = UserCreationForm1()
+
+    if request.method == 'POST':
+        form = UserCreationForm1(request.POST)
+        
+        if form.clean_password2():
+            form.save()
+            user = form.data.get('username')
+            messages.success(request, 'Account was created for ' + user)
+            return redirect('loginTask3')
+
+    context={'form':form}
+    return render(request, 'hw1/register1.html', context)
+    
     
 def registerTask2(request):
     form = UserCreationForm()
