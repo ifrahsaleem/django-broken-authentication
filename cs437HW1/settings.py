@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'hw1',
     'rest_framework',
     'axes',
+    'captcha', 
 ]
 
 MIDDLEWARE = [
@@ -55,6 +56,7 @@ MIDDLEWARE = [
 ]
 # Block only on username
 AXES_ONLY_USER_FAILURES = True
+AXES_LOCKOUT_URL = '/locked'
 ROOT_URLCONF = 'cs437HW1.urls'
 
 TEMPLATES = [
@@ -156,3 +158,6 @@ AUTHENTICATION_BACKENDS = [
     # Django ModelBackend is the default authentication backend.
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+GOOGLE_RECAPTCHA_PUBLIC_KEY = '6LfHaX0dAAAAAKkrmu-aWUT_wPqe5Ioi0SsPiWGe'
+GOOGLE_RECAPTCHA_SECRET_KEY = '6LfHaX0dAAAAACV1zrUuN3Jh2do-ikW4OcRCer0u'

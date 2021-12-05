@@ -1,4 +1,6 @@
 from axes.decorators import axes_dispatch
+from django.contrib.auth.models import User
+from django.http import request
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -11,7 +13,19 @@ from django.contrib.auth.signals import user_login_failed
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.forms import UserCreationForm
 from hw1.forms import UserCreationForm1
+from hw1.forms import CaptchaTestForm
+from cs437HW1.settings import GOOGLE_RECAPTCHA_SECRET_KEY
 from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
+import urllib
+import json
+from .forms import AxesCaptchaForm
+from axes.utils import reset_request
+from django.http.response import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
 # Create your views here.
 
 @axes_dispatch
@@ -82,3 +96,13 @@ def registerTask2(request):
 class LoginUser(UserLoginRateThrottle):
     throttle_classes = [UserLoginRateThrottle]
 
+
+def locked_out(request):
+    if request.POST:
+        form = AxesCaptchaForm(request.POST)
+        if form.is_valid():
+            reset_request(request)
+            return HttpResponseRedirect(reverse_lazy('loginTask3'))
+    else:
+        form = AxesCaptchaForm()
+        return render(request, 'hw1/captcha.html', {'form': form})

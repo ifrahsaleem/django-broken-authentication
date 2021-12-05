@@ -1,7 +1,13 @@
 from django.contrib.auth.models import User
 from django import forms
 import django.contrib.auth.password_validation as validators
+from captcha.fields import CaptchaField
 
+class CaptchaTestForm(forms.Form):
+    captcha = CaptchaField()
+
+class AxesCaptchaForm(forms.Form):
+    captcha = CaptchaField()
 
 class UserCreationForm1(forms.ModelForm):
     """
