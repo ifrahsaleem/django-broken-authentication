@@ -68,12 +68,17 @@ def registerTask1(request):
 
     if request.method == 'POST':
         form = UserCreationForm1(request.POST)
-        
-        if form.clean_password2():
-            form.save()
-            user = form.data.get('username')
-            messages.success(request, 'Account was created for ' + user)
-            return redirect('loginTask3')
+
+        if form.username_check(form.data.get('username')):
+            messages.info(request, 'Username already exists!')
+        else:
+            if form.clean_password2():
+                form.save1()
+                user = form.data.get('username')
+                messages.success(request, 'Account was created for ' + user)
+                return redirect('loginTask3')
+            else:
+                messages.info(request, 'Passwords do not match!')
 
     context={'form':form}
     return render(request, 'hw1/register1.html', context)

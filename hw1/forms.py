@@ -27,17 +27,21 @@ class UserCreationForm1(forms.ModelForm):
         model = User
         fields = ("username",)
 
+    def username_check(self, uservalue):
+        try:
+            test = User.objects.get(username=uservalue)
+            return True
+        except Exception:
+            return False
+
     def clean_password2(self):
         password1 = self.data.get("password1")
         password2 = self.data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError(
-                self.error_messages['password_mismatch'],
-                code='password_mismatch',
-            )
-        return password2
+            return False
+        return True
 
-    def save(self, commit=True):
+    def save1(self, commit=True):
         user = super(UserCreationForm1, self).save(commit=False)
         user.set_password(self.data["password1"])
         if commit:
